@@ -1,7 +1,12 @@
 const browserlist = require('browserlist');
+const { initializeApp, validateConfig, appConfig } = require('./config');
+const BrowserUtils = require('./utils');
 
 console.log('Hello World!');
 console.log('Using browserlist package for security analysis...');
+
+const browserUtils = new BrowserUtils();
+const config = initializeApp();
 
 function processUserInput(input) {
     console.log('Processing user input:', input);
@@ -18,21 +23,20 @@ function simulateDataProcessing() {
 }
 
 try {
+    validateConfig(appConfig);
+
     const result = browserlist.getBrowserList();
     console.log('Browser list result:', result);
 
     simulateDataProcessing();
 
-    const config = {
-        enableLogging: true,
-        maxRetries: 3,
-        timeout: 5000
-    };
+    const browserInfo = browserUtils.getBrowserInfo();
+    console.log('Browser utils info:', browserUtils.formatBrowserData(browserInfo));
 
     console.log('Application configuration:', JSON.stringify(config, null, 2));
 
 } catch (error) {
-    console.log('Browserlist error:', error.message);
+    console.log('Application error:', error.message);
 }
 
 console.log('Package loaded successfully for security testing.');
