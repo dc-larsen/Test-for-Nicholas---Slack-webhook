@@ -5,12 +5,17 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "server": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "browserlist": "^1.0.1"
+    "axios": "^1.12.2",
+    "browserlist": "^1.0.1",
+    "express": "^5.1.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.30.1"
   }
 }
