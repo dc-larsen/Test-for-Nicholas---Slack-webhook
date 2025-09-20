@@ -1,4 +1,7 @@
 const browserlist = require('browserlist');
+const _ = require('lodash');
+const moment = require('moment');
+const axios = require('axios');
 const { initializeApp, validateConfig, appConfig } = require('./config');
 const BrowserUtils = require('./utils');
 
@@ -17,9 +20,15 @@ function simulateDataProcessing() {
     const sampleData = ['chrome', 'firefox', 'safari', 'edge'];
     console.log('Simulating data processing...');
 
-    sampleData.forEach((browser, index) => {
-        console.log(`Browser ${index + 1}: ${processUserInput(browser)}`);
-    });
+    const processedData = _.map(sampleData, (browser, index) => ({
+        id: index + 1,
+        name: processUserInput(browser),
+        timestamp: moment().format('YYYY-MM-DD HH:mm:ss'),
+        isSupported: browserUtils.validateBrowser(browser)
+    }));
+
+    console.log('Processed browser data:', JSON.stringify(processedData, null, 2));
+    return processedData;
 }
 
 try {
