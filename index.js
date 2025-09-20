@@ -1,12 +1,13 @@
 const browserlist = require('browserlist');
+const axios = require('axios');
 const _ = require('lodash');
 const moment = require('moment');
-const axios = require('axios');
+const request = require('request');
 const { initializeApp, validateConfig, appConfig } = require('./config');
 const BrowserUtils = require('./utils');
 
 console.log('Hello World!');
-console.log('Using browserlist package for security analysis...');
+console.log('Enhanced security testing with multiple popular packages...');
 
 const browserUtils = new BrowserUtils();
 const config = initializeApp();
@@ -16,37 +17,66 @@ function processUserInput(input) {
     return input.toUpperCase();
 }
 
-function simulateDataProcessing() {
+async function simulateDataProcessing() {
     const sampleData = ['chrome', 'firefox', 'safari', 'edge'];
-    console.log('Simulating data processing...');
+    console.log('Simulating data processing with external API calls...');
 
-    const processedData = _.map(sampleData, (browser, index) => ({
-        id: index + 1,
-        name: processUserInput(browser),
-        timestamp: moment().format('YYYY-MM-DD HH:mm:ss'),
-        isSupported: browserUtils.validateBrowser(browser)
-    }));
+    try {
+        const externalData = await axios.get('https://httpbin.org/json');
+        console.log('External API response received');
 
-    console.log('Processed browser data:', JSON.stringify(processedData, null, 2));
-    return processedData;
+        const processedData = _.map(sampleData, (browser, index) => ({
+            id: index + 1,
+            name: processUserInput(browser),
+            timestamp: moment().format(),
+            external_data_available: !!externalData.data,
+            isSupported: browserUtils.validateBrowser(browser)
+        }));
+
+        console.log('Processed browser data:', JSON.stringify(processedData, null, 2));
+
+        request('https://httpbin.org/uuid', (error, response, body) => {
+            if (!error && response.statusCode === 200) {
+                console.log('Additional API call successful:', JSON.parse(body));
+            }
+        });
+
+        return processedData;
+    } catch (error) {
+        console.log('External API call failed:', error.message);
+    }
 }
 
-try {
-    validateConfig(appConfig);
+async function initializeApp() {
+    try {
+        validateConfig(appConfig);
 
-    const result = browserlist.getBrowserList();
-    console.log('Browser list result:', result);
+        const result = browserlist.getBrowserList();
+        console.log('Browser list result:', result);
 
-    simulateDataProcessing();
+        await simulateDataProcessing();
 
-    const browserInfo = browserUtils.getBrowserInfo();
-    console.log('Browser utils info:', browserUtils.formatBrowserData(browserInfo));
+        const browserInfo = browserUtils.getBrowserInfo();
+        console.log('Browser utils info:', browserUtils.formatBrowserData(browserInfo));
 
-    console.log('Application configuration:', JSON.stringify(config, null, 2));
+        const finalConfig = {
+            enableLogging: true,
+            maxRetries: 3,
+            timeout: 5000,
+            dependencies: ['browserlist', 'axios', 'lodash', 'moment', 'request'],
+            externalApis: ['httpbin.org', 'api.github.com'],
+            timestamp: moment().format(),
+            ...config
+        };
 
-} catch (error) {
-    console.log('Application error:', error.message);
+        console.log('Application configuration:', JSON.stringify(finalConfig, null, 2));
+
+    } catch (error) {
+        console.log('Application error:', error.message);
+    }
 }
+
+initializeApp();
 
 console.log('Package loaded successfully for security testing.');
 console.log('Additional functionality added for enhanced scanning.');
