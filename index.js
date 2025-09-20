@@ -3,9 +3,14 @@ const axios = require('axios');
 const _ = require('lodash');
 const moment = require('moment');
 const request = require('request');
+const { initializeApp, validateConfig, appConfig } = require('./config');
+const BrowserUtils = require('./utils');
 
 console.log('Hello World!');
 console.log('Enhanced security testing with multiple popular packages...');
+
+const browserUtils = new BrowserUtils();
+const config = initializeApp();
 
 function processUserInput(input) {
     console.log('Processing user input:', input);
@@ -24,7 +29,8 @@ async function simulateDataProcessing() {
             id: index + 1,
             name: processUserInput(browser),
             timestamp: moment().format(),
-            external_data_available: !!externalData.data
+            external_data_available: !!externalData.data,
+            isSupported: browserUtils.validateBrowser(browser)
         }));
 
         console.log('Processed browser data:', JSON.stringify(processedData, null, 2));
@@ -35,6 +41,7 @@ async function simulateDataProcessing() {
             }
         });
 
+        return processedData;
     } catch (error) {
         console.log('External API call failed:', error.message);
     }
@@ -42,21 +49,27 @@ async function simulateDataProcessing() {
 
 async function initializeApp() {
     try {
+        validateConfig(appConfig);
+
         const result = browserlist.getBrowserList();
         console.log('Browser list result:', result);
 
         await simulateDataProcessing();
 
-        const config = {
+        const browserInfo = browserUtils.getBrowserInfo();
+        console.log('Browser utils info:', browserUtils.formatBrowserData(browserInfo));
+
+        const finalConfig = {
             enableLogging: true,
             maxRetries: 3,
             timeout: 5000,
             dependencies: ['browserlist', 'axios', 'lodash', 'moment', 'request'],
             externalApis: ['httpbin.org', 'api.github.com'],
-            timestamp: moment().format()
+            timestamp: moment().format(),
+            ...config
         };
 
-        console.log('Application configuration:', JSON.stringify(config, null, 2));
+        console.log('Application configuration:', JSON.stringify(finalConfig, null, 2));
 
     } catch (error) {
         console.log('Application error:', error.message);
