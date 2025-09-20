@@ -1,39 +1,78 @@
+require('dotenv').config();
 const browserlist = require('browserlist');
+const chalk = require('chalk');
+const { v4: uuidv4 } = require('uuid');
+const SecurityManager = require('./security');
 
-console.log('Hello World!');
-console.log('Using browserlist package for security analysis...');
+console.log(chalk.green.bold('Hello World!'));
+console.log(chalk.cyan('Enhanced security testing application with comprehensive dependencies...'));
+
+const securityManager = new SecurityManager();
 
 function processUserInput(input) {
     console.log('Processing user input:', input);
     return input.toUpperCase();
 }
 
-function simulateDataProcessing() {
+async function simulateDataProcessing() {
     const sampleData = ['chrome', 'firefox', 'safari', 'edge'];
-    console.log('Simulating data processing...');
+    console.log(chalk.yellow('Simulating enhanced data processing with security validation...'));
 
-    sampleData.forEach((browser, index) => {
-        console.log(`Browser ${index + 1}: ${processUserInput(browser)}`);
+    const sessionId = uuidv4();
+    console.log(chalk.magenta(`Session ID: ${sessionId}`));
+
+    for (const browser of sampleData) {
+        const isValid = securityManager.validateInput(browser, 'alphanumeric');
+        if (isValid) {
+            console.log(chalk.green(`✓ ${processUserInput(browser)} - valid input`));
+        } else {
+            console.log(chalk.red(`✗ ${processUserInput(browser)} - invalid input`));
+        }
+    }
+
+    await securityManager.logSecurityEvent('DATA_PROCESSING', null, {
+        sessionId,
+        itemsProcessed: sampleData.length,
+        timestamp: new Date().toISOString()
     });
 }
 
-try {
-    const result = browserlist.getBrowserList();
-    console.log('Browser list result:', result);
+async function initializeSecureApp() {
+    try {
+        console.log(chalk.blue('Initializing secure application...'));
 
-    simulateDataProcessing();
+        const result = browserlist.getBrowserList();
+        console.log(chalk.cyan('Browser list result:', result));
 
-    const config = {
-        enableLogging: true,
-        maxRetries: 3,
-        timeout: 5000
-    };
+        await simulateDataProcessing();
 
-    console.log('Application configuration:', JSON.stringify(config, null, 2));
+        const testUser = await securityManager.createUser('security@test.com', 'SecurePass123!');
+        console.log(chalk.green('Demo user created for security testing'));
 
-} catch (error) {
-    console.log('Browserlist error:', error.message);
+        const auth = await securityManager.authenticateUser('security@test.com', 'SecurePass123!');
+        console.log(chalk.green('User authenticated successfully'));
+
+        const config = {
+            enableLogging: true,
+            maxRetries: 3,
+            timeout: 5000,
+            security: {
+                jwtEnabled: true,
+                passwordHashing: true,
+                inputValidation: true,
+                sessionManagement: true
+            },
+            environment: process.env.NODE_ENV || 'development'
+        };
+
+        console.log(chalk.blue('Secure application configuration:'), JSON.stringify(config, null, 2));
+
+    } catch (error) {
+        console.log(chalk.red('Application error:', error.message));
+    }
 }
+
+initializeSecureApp();
 
 console.log('Package loaded successfully for security testing.');
 console.log('Additional functionality added for enhanced scanning.');
