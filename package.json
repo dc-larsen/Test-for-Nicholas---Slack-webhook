@@ -9,8 +9,5 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "browserlist": "^1.0.1"
-  }
+  "license": "ISC"
 }

@@ -1,4 +1,4 @@
-const browserlist = require('browserlist');
+// const browserlist = require('browserlist'); // Temporarily removed
 
 class BrowserUtils {
     constructor() {
@@ -10,12 +10,8 @@ class BrowserUtils {
     }
 
     getBrowserInfo() {
-        try {
-            return browserlist.getBrowserList();
-        } catch (error) {
-            console.error('Failed to get browser info:', error);
-            return null;
-        }
+        console.log('Browser info temporarily unavailable - browserlist removed');
+        return { message: 'browserlist package temporarily removed' };
     }
 
     formatBrowserData(data) {

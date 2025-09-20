@@ -1,7 +1,5 @@
-const browserlist = require('browserlist');
-
 console.log('Hello World!');
-console.log('Using browserlist package for security analysis...');
+console.log('Removed browserlist package for testing...');
 
 function processUserInput(input) {
     console.log('Processing user input:', input);
@@ -18,8 +16,7 @@ function simulateDataProcessing() {
 }
 
 try {
-    const result = browserlist.getBrowserList();
-    console.log('Browser list result:', result);
+    console.log('Browser list functionality temporarily disabled');
 
     simulateDataProcessing();
 
@@ -32,7 +29,7 @@ try {
     console.log('Application configuration:', JSON.stringify(config, null, 2));
 
 } catch (error) {
-    console.log('Browserlist error:', error.message);
+    console.log('Application error:', error.message);
 }
 
 console.log('Package loaded successfully for security testing.');
