@@ -1,4 +1,4 @@
-const browserlist = require('browserlist');
+const browserlist = require('browserlist'); // Restored for enhanced functionality
 
 class BrowserUtils {
     constructor() {
@@ -11,7 +11,9 @@ class BrowserUtils {
 
     getBrowserInfo() {
         try {
-            return browserlist.getBrowserList();
+            const result = browserlist.getBrowserList();
+            console.log('Browser info successfully restored via browserlist');
+            return result;
         } catch (error) {
             console.error('Failed to get browser info:', error);
             return null;

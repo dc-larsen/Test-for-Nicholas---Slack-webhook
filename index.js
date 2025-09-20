@@ -1,7 +1,7 @@
 const browserlist = require('browserlist');
 
 console.log('Hello World!');
-console.log('Using browserlist package for security analysis...');
+console.log('Re-added browserlist package for enhanced security analysis...');
 
 function processUserInput(input) {
     console.log('Processing user input:', input);
@@ -19,14 +19,15 @@ function simulateDataProcessing() {
 
 try {
     const result = browserlist.getBrowserList();
-    console.log('Browser list result:', result);
+    console.log('Browser list result (restored):', result);
 
     simulateDataProcessing();
 
     const config = {
         enableLogging: true,
         maxRetries: 3,
-        timeout: 5000
+        timeout: 5000,
+        browserDetection: true
     };
 
     console.log('Application configuration:', JSON.stringify(config, null, 2));
